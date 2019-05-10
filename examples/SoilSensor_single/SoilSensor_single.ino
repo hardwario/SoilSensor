@@ -1,12 +1,30 @@
+/*
+
+Soil Moisture Sensor
+====================
+
+Arduino Library for BigClown Soil Sensor
+Author: podija https://github.com/podija
+
+BigClown is a digital maker kit https://www.bigclown.com/ developed by https://www.hardwario.com/
+
+Product: https://shop.bigclown.com/soil-moisture-sensor/
+Specs: https://developers.bigclown.com/hardware/about-soil-moisture-sensor
+Firmware: https://developers.bigclown.com/firmware/how-to-soil-moisture-sensor
+Forum: https://forum.bigclown.com/
+
+MIT License
+
+*/
 #include <OneWire.h>
-#include <BC_Soil_Sensor.h>
+#include <SoilSensor.h>
 #include <DS28E17.h>
 
+// Add a 4k7 pull-up resistor to this pin
 #define SOIL_SENSOR_PIN 7
 
 OneWire oneWire(SOIL_SENSOR_PIN);
-DS28E17 ds28e17(&oneWire);
-BC_Soil_Sensor soilSensor(&oneWire, &ds28e17);
+SoilSensor soilSensor(&oneWire);
 
 void setup() 
 {
@@ -14,8 +32,6 @@ void setup()
   Serial.println("BigClown Soil Sensor Example");
   
   soilSensor.begin();
-
-  delay(300);  
 }
 
 void loop()
@@ -45,6 +61,6 @@ void loop()
   Serial.println("%");
   Serial.println();
    
-  soilSensor.enableSleepMode();
-  delay(10000); 
+  soilSensor.sleep();
+  delay(2000); 
 }

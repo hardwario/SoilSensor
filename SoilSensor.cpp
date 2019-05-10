@@ -1,38 +1,55 @@
+/*
+
+Soil Moisture Sensor
+====================
+
+Arduino Library for BigClown Soil Sensor
+Author: podija https://github.com/podija
+
+BigClown is a digital maker kit https://www.bigclown.com/ developed by https://www.hardwario.com/
+
+Product: https://shop.bigclown.com/soil-moisture-sensor/
+Specs: https://developers.bigclown.com/hardware/about-soil-moisture-sensor
+Firmware: https://developers.bigclown.com/firmware/how-to-soil-moisture-sensor
+Forum: https://forum.bigclown.com/
+
+MIT License
+
+*/
 #include "Arduino.h"
-#include "BC_Soil_Sensor.h"
+#include "SoilSensor.h"
 
 //konstruktor, vyzaduje OneWire a DS28E17
-BC_Soil_Sensor::BC_Soil_Sensor(OneWire *oneWireW, DS28E17 *ds28e17W)
+SoilSensor::SoilSensor(OneWire *oneWireW)
 {
   oneWire = oneWireW;
-  
-  ds28e17 = ds28e17W;
+  ds28e17 = DS28E17(oneWireW);
 }
 
 //vyhledani a inicializace senzoru
-bool BC_Soil_Sensor::begin()
+bool SoilSensor::begin()
 {
+  oneWire->reset();
+  oneWire->reset();
+
   oneWire->reset_search();
   oneWire->target_search(0x19);
   int timeout = 0;
   while (bc_soil_sensor.address[0]==0){//z nejakeho duvodu tady dochazi k tomu, ze se adresa nenajde napoprve
     oneWire->reset_search();
     oneWire->search(bc_soil_sensor.address);
-    Serial.print(" Address:  ");
+    /*Serial.print(" Address:  ");
     for (int i=0;i<8;i++){
       Serial.print(bc_soil_sensor.address[i], HEX);
       Serial.print(" ");
     }
-    Serial.println();
+    Serial.println();*/
     timeout ++;
     if (timeout == SEARCH_TIMEOUT)
       return false;
-    
-    delay(100);
   }
-
   
-  ds28e17->setAddress(bc_soil_sensor.address);
+  ds28e17.setAddress(bc_soil_sensor.address);
   
   _EEPROMLoad();
   
@@ -42,7 +59,7 @@ bool BC_Soil_Sensor::begin()
 }
 
 //cteni vlhkosti v procentech, prepocteno podle kalibrace
-bool BC_Soil_Sensor::readMoisture(uint8_t *moisture)
+bool SoilSensor::readMoisture(uint8_t *moisture)
 {
   uint16_t raw;
   if (!_ZSSC3123ReadRaw(&raw)){
@@ -51,7 +68,7 @@ bool BC_Soil_Sensor::readMoisture(uint8_t *moisture)
   
   uint16_t *calibration = bc_soil_sensor.eeprom.calibration;
   
-  Serial.println(raw);
+  //Serial.println(raw);
 
   for (int i = 0; i < 11; i++){
     if (raw < calibration[i]){
@@ -71,29 +88,28 @@ bool BC_Soil_Sensor::readMoisture(uint8_t *moisture)
 }
 
 //funkce pro probuzeni uspaneho prevodniku
-void BC_Soil_Sensor::wakeUp()
+void SoilSensor::wakeUp()
 {
-  ds28e17->wakeUp();   
+  ds28e17.wakeUp();   
 }
 
 //uspani prevodniku, probouzi se nabeznou hranou
-void BC_Soil_Sensor::enableSleepMode()
+void SoilSensor::sleep()
 {  
-  ds28e17->enableSleepMode();  
+  ds28e17.enableSleepMode();  
 }
 
 //cteni teploty Celsius
-bool BC_Soil_Sensor::readTemperatureCelsius(float *temperature) 
+bool SoilSensor::readTemperatureCelsius(float *temperature) 
 {
   _TMP112StartOneShotConversion();
-  delay(100);
+  delay(1);
   
   uint8_t readed[2];
-  if (!ds28e17->memoryRead(TMP112_ADDRESS, 0x00, readed, 2)){
+  if (!ds28e17.memoryRead(TMP112_ADDRESS, 0x00, readed, 2)){
     return false;
   }
- 
-  
+   
   uint16_t temperatureRaw = readed[0] << 8 | readed[1];
   
   *temperature = (temperatureRaw >> 4) * 0.0625;
@@ -102,7 +118,7 @@ bool BC_Soil_Sensor::readTemperatureCelsius(float *temperature)
 }
 
 //cteni teploty kelvin
-bool BC_Soil_Sensor::readTemperatureKelvin(float *temperature)
+bool SoilSensor::readTemperatureKelvin(float *temperature)
 {
   float temp;
   if (!readTemperatureCelsius(&temp) ) {
@@ -114,7 +130,7 @@ bool BC_Soil_Sensor::readTemperatureKelvin(float *temperature)
 }
  
 //cteni teploty Fahrenheit
-bool BC_Soil_Sensor::readTemperatureFahrenheit(float *temperature)
+bool SoilSensor::readTemperatureFahrenheit(float *temperature)
 {
   float temp;
   if (!readTemperatureCelsius(&temp) ) {
@@ -126,7 +142,7 @@ bool BC_Soil_Sensor::readTemperatureFahrenheit(float *temperature)
 }
 
 //cteni kalibracnich hodnot z EEPROM    
-bool BC_Soil_Sensor::_EEPROMRead(uint8_t address, void *buffer, size_t length)
+bool SoilSensor::_EEPROMRead(uint8_t address, void *buffer, size_t length)
 {
   uint8_t a[8];
   uint8_t b[sizeof(a)];
@@ -146,21 +162,21 @@ bool BC_Soil_Sensor::_EEPROMRead(uint8_t address, void *buffer, size_t length)
 
     uint32_t memoryAddress = address + i + EEPROM_BANK_A;
 
-    if (!ds28e17->memoryRead(EEPROM_ADDRESS, memoryAddress, a, len))
+    if (!ds28e17.memoryRead(EEPROM_ADDRESS, memoryAddress, a, len))
     {
       return false;
     }        
 
     memoryAddress = address + i + EEPROM_BANK_B;
 
-    if (!ds28e17->memoryRead(EEPROM_ADDRESS, memoryAddress, b, len))
+    if (!ds28e17.memoryRead(EEPROM_ADDRESS, memoryAddress, b, len))
     {
       return false;
     }
 
     memoryAddress = address + i + EEPROM_BANK_C;
 
-    if (!ds28e17->memoryRead(EEPROM_ADDRESS, memoryAddress, c, len))
+    if (!ds28e17.memoryRead(EEPROM_ADDRESS, memoryAddress, c, len))
     {
       return false;
     }
@@ -170,11 +186,12 @@ bool BC_Soil_Sensor::_EEPROMRead(uint8_t address, void *buffer, size_t length)
       *p++ = (a[j] & b[j]) | (a[j] & c[j]) | (b[j] & c[j]);
     }
   }
-return true;    
+
+  return true;    
 }
 
 //pokud se nepovede precist z EEPROM, vyplni se kalibrace rovnomerne
-void BC_Soil_Sensor::_EEPROMFill()
+void SoilSensor::_EEPROMFill()
 {
     bc_soil_sensor.eeprom.product = 0;
     bc_soil_sensor.eeprom.revision = BC_SOIL_SENSOR_REV_NO_EEPROM;
@@ -193,7 +210,7 @@ void BC_Soil_Sensor::_EEPROMFill()
 }
 
 //nacteni eeprom vcetne kontroly, zda to proslo a pripadne nahrani nahradni kalibrace
-bool BC_Soil_Sensor::_EEPROMLoad()
+bool SoilSensor::_EEPROMLoad()
 {
   bool error = false;
 
@@ -202,7 +219,7 @@ bool BC_Soil_Sensor::_EEPROMLoad()
   if (!_EEPROMRead(0, &header, sizeof(header))){
     error = true;
   }
-
+  /*
   Serial.print("EEPROM header: ");
   Serial.print(header.signature, HEX);
   Serial.print(" ");
@@ -212,7 +229,7 @@ bool BC_Soil_Sensor::_EEPROMLoad()
   Serial.print(" ");
   Serial.print(header.crc);
   Serial.println();
-  
+  */
   if (header.signature != BC_SOIL_SENSOR_SIGNATURE){
     error = true;
   }
@@ -236,7 +253,7 @@ bool BC_Soil_Sensor::_EEPROMLoad()
   if (error){
     _EEPROMFill();
   }
-
+  /*
   Serial.print("EEPROM data: ");
   Serial.print(bc_soil_sensor.eeprom.product, HEX);
   Serial.print(" ");
@@ -250,23 +267,23 @@ bool BC_Soil_Sensor::_EEPROMLoad()
     Serial.print(" ");
   }
   Serial.println();
+  */
   
   return error;    
 }
 
 //cteni raw kapacity z ZSSC32123
-bool BC_Soil_Sensor::_ZSSC3123ReadRaw(uint16_t *cap)
+bool SoilSensor::_ZSSC3123ReadRaw(uint16_t *cap)
 {
   uint8_t data[1] = {0x00};
-  ds28e17->write(ZSSC3123_ADDRESS, data, 1);//measure request
+  ds28e17.write(ZSSC3123_ADDRESS, data, 1);//measure request
 
   uint8_t readedBuff[2];
-  if (ds28e17->read(ZSSC3123_ADDRESS, readedBuff, 2) == false){
+  if (ds28e17.read(ZSSC3123_ADDRESS, readedBuff, 2) == false){
     return false;
   }
 
   uint16_t readed = readedBuff[0] << 8 | readedBuff[1];
-
   
   if ((readed & 0xc000) == 0)
   {
@@ -276,17 +293,16 @@ bool BC_Soil_Sensor::_ZSSC3123ReadRaw(uint16_t *cap)
   return false;    
 }
 
-
 //umozni, aby se TMP112 po kazdem precteni uspalo dokud neprijde pozadavek
-bool BC_Soil_Sensor::_TMP112EnableShutdownMode()
+bool SoilSensor::_TMP112EnableShutdownMode()
 {
   uint8_t data[2] = {0x01, 0x80};
-  return ds28e17->memoryWrite(TMP112_ADDRESS, 0x01, data, 2);  
+  return ds28e17.memoryWrite(TMP112_ADDRESS, 0x01, data, 2);  
 }
 
 //pozadavek na cteni
-bool BC_Soil_Sensor::_TMP112StartOneShotConversion()
+bool SoilSensor::_TMP112StartOneShotConversion()
 {
   uint8_t data[2] = {0x81, 0x80};
-  return ds28e17->memoryWrite(TMP112_ADDRESS, 0x01, data, 2);  
+  return ds28e17.memoryWrite(TMP112_ADDRESS, 0x01, data, 2);  
 }

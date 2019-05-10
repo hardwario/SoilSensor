@@ -1,5 +1,23 @@
-#ifndef BC_Soil_Sensor_h
-#define BC_Soil_Sensor_h
+/*
+
+Soil Moisture Sensor
+====================
+
+Arduino Library for BigClown Soil Sensor
+Author: podija https://github.com/podija
+
+BigClown is a digital maker kit https://www.bigclown.com/ developed by https://www.hardwario.com/
+
+Product: https://shop.bigclown.com/soil-moisture-sensor/
+Specs: https://developers.bigclown.com/hardware/about-soil-moisture-sensor
+Firmware: https://developers.bigclown.com/firmware/how-to-soil-moisture-sensor
+Forum: https://forum.bigclown.com/
+
+MIT License
+
+*/
+#ifndef SoilSensor_h
+#define SoilSensor_h
 
 #include "Arduino.h"
 #include <OneWire.h>
@@ -37,21 +55,20 @@ typedef struct
     uint16_t calibration[11]; //! @brief Calibration points
 } bc_soil_sensor_eeprom_t;
 
-
 typedef struct
 {
     uint8_t address[8] = {0,0,0,0,0,0,0,0};
     bc_soil_sensor_eeprom_t eeprom;
 }bc_soil_sensor_t;
 
-class BC_Soil_Sensor
+class SoilSensor
 {
   public:
-    BC_Soil_Sensor(OneWire *oneWire, DS28E17 *ds28e17W);
+    SoilSensor(OneWire *oneWire);
     bool begin();
     
     void wakeUp();
-    void enableSleepMode();
+    void sleep();
     
     bool readMoisture(uint8_t *moisture);
  
@@ -61,7 +78,7 @@ class BC_Soil_Sensor
     
   private:
     OneWire *oneWire;
-    DS28E17 *ds28e17;
+    DS28E17 ds28e17;
     bc_soil_sensor_t bc_soil_sensor;
     bool _EEPROMRead(uint8_t address, void *buffer, size_t length);
     void _EEPROMFill();
