@@ -1,0 +1,32 @@
+#######################################
+# Syntax Coloring Map For OneWire
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+SoilSensor	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+begin	KEYWORD2
+wakeUp	KEYWORD2
+sleep	KEYWORD2
+readMoisture	KEYWORD2
+readMoistureInterval	KEYWORD2
+readTemperatureCelsius	KEYWORD2
+readTemperatureKelvin	KEYWORD2
+readTemperatureFahrenheit	KEYWORD2
+
+
+#######################################
+# Instances (KEYWORD2)
+#######################################
+
+
+#######################################
+# Constants (LITERAL1)
+#######################################
