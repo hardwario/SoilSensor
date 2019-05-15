@@ -50,5 +50,5 @@ void loop()
   Serial.println(moisture);
    
   soilSensor.sleep();
-  delay(2000); 
+  delay(50); 
 }
