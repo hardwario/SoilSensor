@@ -33,8 +33,8 @@ MIT License
 
 #define EEPROM_ADDRESS    0x51
 #define EEPROM_BANK_A     0
-#define EEPROM_BANK_B     170
-#define EEPROM_BANK_C     340
+#define EEPROM_BANK_B     0x080
+#define EEPROM_BANK_C     0x100
 
 #define BC_SOIL_SENSOR_SIGNATURE 0xdeadbeef
 #define BC_SOIL_SENSOR_MIN 1700
