@@ -136,7 +136,7 @@ bool SoilSensor::readTemperatureCelsius(float *temperature)
 }
 
 
-bool SoilSensor::readTemperatureKelvin(float *temperature)
+bool SoilSensor::readTemperatureFahrenheit(float *temperature)
 {
   float temp;
   if (!readTemperatureCelsius(&temp) ) {
@@ -148,7 +148,7 @@ bool SoilSensor::readTemperatureKelvin(float *temperature)
 }
 
  
-bool SoilSensor::readTemperatureFahrenheit(float *temperature)
+bool SoilSensor::readTemperatureKelvin(float *temperature)
 {
   float temp;
   if (!readTemperatureCelsius(&temp) ) {
