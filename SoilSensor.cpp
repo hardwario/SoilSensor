@@ -172,7 +172,7 @@ bool SoilSensor::_EEPROMRead(uint8_t address, void *buffer, size_t length)
   }
 
   size_t j = 0;
-  uint8_t *p = buffer;
+  uint8_t *p = (uint8_t *)buffer;
 
   for (size_t i = 0; i < length; i += sizeof(a))
   {
