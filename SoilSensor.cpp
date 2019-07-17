@@ -21,12 +21,15 @@ bool SoilSensor::begin()
     {
         oneWire->reset_search();
         oneWire->search(sensor.address);
-        /*Serial.print(" Address:  ");
-        for (int i=0;i<8;i++){
+        /*
+        Serial.print(" Address:  ");
+        for (int i = 0; i < 8; i++)
+        {
           Serial.print(sensor.address[i], HEX);
           Serial.print(" ");
         }
-        Serial.println();*/
+        Serial.println();
+        */
         if (++timeout == SEARCH_TIMEOUT)
         {
             return false;
@@ -224,17 +227,19 @@ bool SoilSensor::_EEPROMLoad()
     {
         error = true;
     }
-  /*
-  Serial.print("EEPROM header: ");
-  Serial.print(header.signature, HEX);
-  Serial.print(" ");
-  Serial.print(header.version, HEX);
-  Serial.print(" ");
-  Serial.print(header.length);
-  Serial.print(" ");
-  Serial.print(header.crc);
-  Serial.println();
-  */
+
+    /*
+    Serial.print("EEPROM header: ");
+    Serial.print(header.signature, HEX);
+    Serial.print(" ");
+    Serial.print(header.version, HEX);
+    Serial.print(" ");
+    Serial.print(header.length);
+    Serial.print(" ");
+    Serial.print(header.crc);
+    Serial.println();
+    */
+
     if (header.signature != BC_SOIL_SENSOR_SIGNATURE)
     {
         error = true;
@@ -264,21 +269,23 @@ bool SoilSensor::_EEPROMLoad()
     {
         _EEPROMFill();
     }
-  /*
-  Serial.print("EEPROM data: ");
-  Serial.print(sensor.eeprom.product, HEX);
-  Serial.print(" ");
-  Serial.print(sensor.eeprom.revision, HEX);
-  Serial.print(" ");
-  Serial.print(sensor.eeprom.label);
-  Serial.print(" ");
-  for (int z=0;z<11;z++)
-  {
-    Serial.print(sensor.eeprom.calibration[z]);
+
+    /*
+    Serial.print("EEPROM data: ");
+    Serial.print(sensor.eeprom.product, HEX);
     Serial.print(" ");
-  }
-  Serial.println();
-  */
+    Serial.print(sensor.eeprom.revision, HEX);
+    Serial.print(" ");
+    Serial.print(sensor.eeprom.label);
+    Serial.print(" ");
+    for (int z = 0; z < 11; z++)
+    {
+      Serial.print(sensor.eeprom.calibration[z]);
+      Serial.print(" ");
+    }
+    Serial.println();
+    */
+
     return error;
 }
 
