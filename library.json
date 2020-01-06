@@ -1,6 +1,6 @@
 {
-    "name": "BigClown Soil Sensor",
-    "description": "BigClown Soil Sensor measure soil moisture and temperature. This sensor uses ZSSC3123 and DS28E17 circuits",
+    "name": "HARDWARIO Soil Sensor",
+    "description": "HARDWARIO Soil Sensor measure soil moisture and temperature. This sensor uses ZSSC3123 and DS28E17 circuits",
     "keywords": "onewire, 1-wire, soil, moisture, sensor, temperature",
     "authors": [
         {
@@ -12,10 +12,10 @@
     ],
     "repository": {
         "type": "git",
-        "url": "https://github.com/podija/SoilSensor"
+        "url": "https://github.com/bigclownlabs/arduino-soil-sensor"
     },
     "version": "1.1.0",
-    "homepage": "https://shop.bigclown.com/soil-moisture-sensor/",
+    "homepage": "https://shop.hardwario.com/soil-sensor/",
     "frameworks": "Arduino",
     "examples": [
         "examples/*/*.ino"
