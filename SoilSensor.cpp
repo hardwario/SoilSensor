@@ -45,6 +45,16 @@ bool SoilSensor::begin()
     return true;
 }
 
+bool SoilSensor::readMoistureRaw(uint16_t *moisture)
+{
+    if (!_ZSSC3123ReadRaw(moisture))
+    {
+        return false;
+    }
+
+    return true;
+}
+
 bool SoilSensor::readMoisture(uint8_t *moisture)
 {
     uint16_t a;

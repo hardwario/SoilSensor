@@ -99,23 +99,21 @@ class SoilSensor
      * @brief       Put soil sensor into sleep mode.
      */
     void sleep();
-    
+
     /**
-      * @brief       Read percentage moisture from soil sensor.
+      * @brief       Read raw moisture from soil sensor.
+      * @param[out]  raw   raw moisture to be read
+      * @return      True if the read was successful, otherwise false.
+      */
+    bool readMoistureRaw(uint16_t *moisture);
+
+    /**
+      * @brief       Experimental: Read percentage moisture from soil sensor.
       * @param[out]  moisture   moisture to be read
       * @return      True if the read was successful, otherwise false.
       */
     bool readMoisture(uint8_t *moisture);
     
-    /**
-     * @brief       Read moisture from soil sensor tranformed to defined interval.
-     * @param[out]  moisture  moisture to be read
-     * @param       min       minimal value of defined interval
-     * @param       max       maximal value of defined interval
-     * @return      True if the read was successful, otherwise false.
-     */
-    bool readMoistureInterval(uint16_t *moisture, uint16_t min, uint16_t max);
- 
     /**
      * @brief       Read temperature in Celsius from soil sensor.
      * @param[out]  temperature   temperature to be read
@@ -192,6 +190,15 @@ class SoilSensor
      */ 
     bool _TMP112StartOneShotConversion();
     
+    /**
+     * @brief       Read moisture from soil sensor tranformed to defined interval.
+     * @param[out]  moisture  moisture to be read
+     * @param       min       minimal value of defined interval
+     * @param       max       maximal value of defined interval
+     * @return      True if the read was successful, otherwise false.
+     */
+    bool readMoistureInterval(uint16_t *moisture, uint16_t min, uint16_t max);
+     
 };
 
 #endif

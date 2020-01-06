@@ -3,10 +3,11 @@
 Soil Moisture Sensor
 ====================
 
-Arduino Library for BigClown Soil Sensor
+Arduino Library for HARDWARIO Soil Sensor
 Author: podija https://github.com/podija
+        hubmartin https://github.com/hubmartin
 
-BigClown is a digital maker kit https://www.bigclown.com/ developed by https://www.hardwario.com/
+HARDWARIO is a digital maker kit developed by https://www.hardwario.com/
 
 Product: https://shop.bigclown.com/soil-moisture-sensor/
 Specs: https://developers.bigclown.com/hardware/about-soil-moisture-sensor
@@ -20,10 +21,9 @@ This example uses BigClown Soil Sensor for soil moisture and temperature measure
 */
 #include <OneWire.h>
 #include <SoilSensor.h>
-#include <DS28E17.h>
 
 // Add a 4k7 pull-up resistor to this pin
-#define SOIL_SENSOR_PIN 8
+#define SOIL_SENSOR_PIN 7
 
 OneWire oneWire(SOIL_SENSOR_PIN);
 SoilSensor soilSensor(&oneWire);
@@ -46,21 +46,10 @@ void loop()
   Serial.print(temperature);
   Serial.println("°C");
 
-  soilSensor.readTemperatureFahrenheit(&temperature);
-  Serial.print("Temperature:  ");
-  Serial.print(temperature);
-  Serial.println("°F");
-
-  soilSensor.readTemperatureKelvin(&temperature);
-  Serial.print("Temperature:  ");
-  Serial.print(temperature);
-  Serial.println("K");
-  
-  uint8_t moisture;
-  soilSensor.readMoisture(&moisture);
+  uint16_t moisture;
+  soilSensor.readMoistureRaw(&moisture);
   Serial.print("Moisture:  ");
   Serial.print(moisture);
-  Serial.println("%");
   Serial.println();
    
   soilSensor.sleep();
