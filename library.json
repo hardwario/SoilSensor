@@ -12,9 +12,9 @@
     ],
     "repository": {
         "type": "git",
-        "url": "https://github.com/bigclownlabs/arduino-soil-sensor"
+        "url": "https://github.com/bigclownlabs/SoilSensor"
     },
-    "version": "1.1.0",
+    "version": "1.2.0",
     "homepage": "https://shop.hardwario.com/soil-sensor/",
     "frameworks": "Arduino",
     "examples": [
