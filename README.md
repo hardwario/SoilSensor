@@ -1,15 +1,17 @@
 # HARDWARIO Soil Moisture Sensor
 
 Arduino Library for HARDWARIO Soil Sensor
-Author: podija https://github.com/podija
-        hubmartin https://github.com/hubmartin
+
+### Authors
+- podija https://github.com/podija
+- hubmartin https://github.com/hubmartin
 
 HARDWARIO is a digital maker kit developed by https://www.hardwario.com/
 
-Product: https://shop.hardwario.com/soil-sensor/
-Specs: https://developers.hardwario.com/hardware/about-soil-moisture-sensor
-Firmware: https://developers.hardwario.com/firmware/how-to-soil-moisture-sensor
-Forum: https://forum.bigclown.com/
+- Product: https://shop.hardwario.com/soil-sensor/
+- Specs: https://developers.hardwario.com/hardware/about-soil-moisture-sensor
+- Firmware: https://developers.hardwario.com/firmware/how-to-soil-moisture-sensor
+- Forum: https://forum.bigclown.com/
 
 MIT License
 
