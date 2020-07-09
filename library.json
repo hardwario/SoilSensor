@@ -13,7 +13,7 @@
         "type": "git",
         "url": "https://github.com/hardwario/SoilSensor"
     },
-    "version": "1.2.0",
+    "version": "1.2.1",
     "homepage": "https://shop.hardwario.com/soil-sensor/",
     "frameworks": "Arduino"
 }
