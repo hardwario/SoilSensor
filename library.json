@@ -6,7 +6,6 @@
         {
             "name": "Jakub Podivinsky",
             "email": "podija@seznam.cz",
-            "url": " ",
             "maintainer": true
         }
     ],
@@ -16,8 +15,5 @@
     },
     "version": "1.2.0",
     "homepage": "https://shop.hardwario.com/soil-sensor/",
-    "frameworks": "Arduino",
-    "examples": [
-        "examples/*/*.ino"
-    ]
+    "frameworks": "Arduino"
 }
